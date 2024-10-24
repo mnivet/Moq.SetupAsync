@@ -165,6 +165,26 @@ namespace Moq.Language.Flow
         {
             this.Setup.Verifiable(failMessage);
         }
+
+        public void Verifiable(Times times)
+        {
+            this.Setup.Verifiable(times);
+        }
+
+        public void Verifiable(Func<Times> times)
+        {
+            this.Setup.Verifiable(times);
+        }
+
+        public void Verifiable(Times times, string failMessage)
+        {
+            this.Setup.Verifiable(times, failMessage);
+        }
+
+        public void Verifiable(Func<Times> times, string failMessage)
+        {
+            this.Setup.Verifiable(times, failMessage);
+        }
     }
 
     public class SetupAsync<TMock, TResult> : ISetupAsync<TResult>
@@ -324,6 +344,26 @@ namespace Moq.Language.Flow
         public void Verifiable(string failMessage)
         {
             this.Setup.Verifiable(failMessage);
+        }
+
+        public void Verifiable(Times times)
+        {
+            this.Setup.Verifiable(times);
+        }
+
+        public void Verifiable(Func<Times> times)
+        {
+            this.Setup.Verifiable(times);
+        }
+
+        public void Verifiable(Times times, string failMessage)
+        {
+            this.Setup.Verifiable(times, failMessage);
+        }
+
+        public void Verifiable(Func<Times> times, string failMessage)
+        {
+            this.Setup.Verifiable(times, failMessage);
         }
     }
 }
