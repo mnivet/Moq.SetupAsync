@@ -7,48 +7,48 @@ namespace Moq.SetupAsync.Tests
     public class SetupAsyncFuncFixture
     {
         [Fact]
-        public void SetupAsyncFuncIsWaitable()
+        public async Task SetupAsyncFuncCanBeAwaited()
         {
             var mock = new Mock<IFoo>();
             mock.SetupAsync(x => x.ExecFuncAsync());
 
-            mock.Object.ExecFuncAsync().Wait();
+            await mock.Object.ExecFuncAsync();
 
             mock.VerifyAll();
         }
 
         [Fact]
-        public void SetupAsyncFuncWithOneArgIsWaitable()
+        public async Task SetupAsyncFuncWithOneArgCanBeAwaited()
         {
             var mock = new Mock<IFoo>();
             mock.SetupAsync(x => x.ExecFuncAsync(It.IsAny<string>()));
 
-            mock.Object.ExecFuncAsync("any string").Wait();
+            await mock.Object.ExecFuncAsync("any string");
 
             mock.VerifyAll();
         }
 
         [Fact]
-        public void SetupAsyncFuncIsVerifiable()
+        public async Task SetupAsyncFuncIsVerifiable()
         {
             var mock = new Mock<IFoo>();
             mock.SetupAsync(x => x.ExecFuncAsync()).Verifiable();
             mock.Verify(x => x.ExecFuncAsync(), Times.Never);
 
-            mock.Object.ExecFuncAsync().Wait();
+            await mock.Object.ExecFuncAsync();
 
             mock.Verify(x => x.ExecFuncAsync(), Times.Once);
             mock.Verify();
         }
 
         [Fact]
-        public void SetupAsyncFuncWithOneArgIsVerifiable()
+        public async Task SetupAsyncFuncWithOneArgIsVerifiable()
         {
             var mock = new Mock<IFoo>();
             mock.SetupAsync(x => x.ExecFuncAsync(It.IsAny<string>())).Verifiable();
             mock.Verify(x => x.ExecFuncAsync("any string"), Times.Never);
 
-            mock.Object.ExecFuncAsync("any string").Wait();
+            await mock.Object.ExecFuncAsync("any string");
 
             mock.Verify(x => x.ExecFuncAsync("any string"), Times.Once);
             mock.Verify();
@@ -65,25 +65,25 @@ namespace Moq.SetupAsync.Tests
         }
 
         [Fact]
-        public void SetupAsyncFuncReturnsNullByDefault()
+        public async Task SetupAsyncFuncReturnsNullByDefault()
         {
             var mock = new Mock<IFoo>();
             mock.SetupAsync(x => x.ExecFuncAsync());
 
-            Assert.Null(mock.Object.ExecFuncAsync().Result);
+            Assert.Null(await mock.Object.ExecFuncAsync());
         }
 
         [Fact]
-        public void SetupAsyncFuncWithStaticReturns()
+        public async Task SetupAsyncFuncWithStaticReturns()
         {
             var mock = new Mock<IFoo>();
             mock.SetupAsync(x => x.ExecFuncAsync()).Returns("custom return");
 
-            Assert.Equal("custom return", mock.Object.ExecFuncAsync().Result);
+            Assert.Equal("custom return", await mock.Object.ExecFuncAsync());
         }
 
         [Fact]
-        public void SetupAsyncFuncWithComputedReturns()
+        public async Task SetupAsyncFuncWithComputedReturns()
         {
             var mock = new Mock<IFoo>();
             var isCalled = false;
@@ -93,29 +93,29 @@ namespace Moq.SetupAsync.Tests
                 return "custom return";
             });
 
-            Assert.Equal("custom return", mock.Object.ExecFuncAsync().Result);
+            Assert.Equal("custom return", await mock.Object.ExecFuncAsync());
             Assert.True(isCalled);
         }
 
         [Fact]
-        public void SetupAsyncFuncWithOneArgWithReturnsThatDependsOnArg()
+        public async Task SetupAsyncFuncWithOneArgWithReturnsThatDependsOnArg()
         {
             var mock = new Mock<IFoo>();
             mock.SetupAsync(x => x.ExecFuncAsync(It.IsAny<string>())).Returns<string>(s => "hello " + s);
 
-            var result = mock.Object.ExecFuncAsync("any string").Result;
+            var result = await mock.Object.ExecFuncAsync("any string");
 
             Assert.Equal("hello any string", result);
         }
 
         [Fact]
-        public void SetupAsyncFuncWithThrows()
+        public async Task SetupAsyncFuncWithThrows()
         {
             var mock = new Mock<IFoo>();
             mock.SetupAsync(x => x.ExecFuncAsync()).Throws<ArgumentException>();
             var task = mock.Object.ExecFuncAsync();
 
-            Assert.ThrowsAsync<ArgumentException>(() => task).Wait();
+            await Assert.ThrowsAsync<ArgumentException>(() => task);
         }
 
         public interface IFoo
